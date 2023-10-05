@@ -1,5 +1,6 @@
 #pragma once
 
+#include "risky.hpp"
 #include <array>
 #include <cstdint>
 #include <concepts>
@@ -7,39 +8,37 @@
 
 namespace risky {
 
-typedef double freg_t;
-
 template<typename T>
-concept register64 = requires(T a) {
-    sizeof(T) == 8;
-    std::default_initializable<T>;
-};
-
-struct ireg_t {
+struct RegisterBase {
 public:
-    inline constexpr ireg_t(std::uint64_t v) noexcept : _v(v) {}
-    inline constexpr ireg_t() noexcept : _v(0) {}
+    inline constexpr RegisterBase(T v) noexcept : _v(v) {}
+    inline constexpr RegisterBase() noexcept : _v(0) {}
 
-    inline constexpr operator std::uint64_t() const noexcept { return _v; }
-    inline constexpr operator std::uint64_t&() & noexcept { return _v; }
-    inline constexpr operator std::uint64_t const&() const& noexcept { return _v; }
-
-    inline constexpr std::uint32_t upper() const { return (std::uint32_t)(_v >> 32); }
-    inline constexpr std::uint32_t lower() const { return (std::uint32_t)(_v & 0xFFFFFFFF); }
+    inline constexpr operator T() const noexcept { return _v; }
+    inline constexpr operator T&() & noexcept { return _v; }
+    inline constexpr operator T const&() const& noexcept { return _v; }
 private:
-    std::uint64_t _v;
+    T _v;
+};
+
+template<IsaWidth W>
+struct IRegister;
+
+template<>
+struct IRegister<IsaWidth::RV32>: RegisterBase<std::uint32_t> {
+
 };
 
 
-static_assert(register64<ireg_t>);
-static_assert(register64<freg_t>);
+static_assert(CRegister64<IRegister<IsaWidth::RV32>>);
+static_assert(CRegister64<freg_t>);
 
 template<register64 R>
-struct iregs {
+struct IRegisters {
 public:
     static constexpr const std::size_t COUNT = 32;
 
-    iregs() : _regs() {
+    IRegisters() : _regs() {
         
     }
 

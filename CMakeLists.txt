@@ -24,4 +24,4 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
   $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/include")
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "./include/")
