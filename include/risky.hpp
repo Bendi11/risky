@@ -9,9 +9,9 @@ namespace risky {
 
 /// Required width of a register, associated with the `BaseIntegerISA`
 enum struct RegisterWidth : std::uint8_t {
-    W32,
-    W64,
-    W128
+    W32 = 32,
+    W64 = 64,
+    W128 = 128
 };
 
 /// Enumeration over all valid base integer instruction sets that can be expanded upon with extensions
@@ -27,7 +27,8 @@ public:
     BaseIntegerISA() = delete;
 
     inline constexpr operator std::uint8_t() const noexcept { return _v; }
-
+    
+    /// Get the required register width for this base instruction set
     inline constexpr RegisterWidth width() const noexcept {
         switch(_v) {
             case RV32I:
