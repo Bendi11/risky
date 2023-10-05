@@ -3,6 +3,7 @@
 #include "register/register.hpp"
 #include "risky.hpp"
 #include <cstdlib>
+#include <limits>
 
 namespace risky {
 
@@ -13,7 +14,7 @@ public:
     /// Allocate `nb` bytes of memory to use for the emulator
     Memory(std::size_t nb) {
         if(WIDTH == RegisterWidth::W32) {
-            nb = (nb > 0xffffffff) ? 0xffffffff : nb;
+            nb = (nb > std::numeric_limits<std::uint32_t>::max()) ? std::numeric_limits<std::uint32_t>::max() : nb;
         }
 
         _buf = static_cast<std::uint8_t*>(std::malloc(nb));
