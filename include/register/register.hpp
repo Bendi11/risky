@@ -21,19 +21,9 @@ private:
     T _v;
 };
 
-template<IsaWidth W>
-struct IRegister;
-
-template<>
-struct IRegister<IsaWidth::RV32>: RegisterBase<std::uint32_t> {
-
-};
 
 
-static_assert(CRegister64<IRegister<IsaWidth::RV32>>);
-static_assert(CRegister64<freg_t>);
-
-template<register64 R>
+template<typename R>
 struct IRegisters {
 public:
     static constexpr const std::size_t COUNT = 32;
