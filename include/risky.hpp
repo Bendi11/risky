@@ -7,14 +7,44 @@
 
 namespace risky {
 
-/// Enumeration over all valid base integer instruction sets that can be expanded upon with extensions
-enum struct BaseIntegerISA : std::uint8_t {
-    RV32I =  1,
-    RV32E =  2,
-    RV64I =  3,
-    RV128I = 4,
+/// Required width of a register, associated with the `BaseIntegerISA`
+enum struct RegisterWidth : std::uint8_t {
+    W32,
+    W64,
+    W128
 };
 
+/// Enumeration over all valid base integer instruction sets that can be expanded upon with extensions
+struct BaseIntegerISA {
+public:
+    static constexpr const std::uint8_t 
+        RV32I =  1,
+        RV32E =  2,
+        RV64I =  3,
+        RV128I = 4;
+
+    inline constexpr BaseIntegerISA(std::uint8_t v) noexcept : _v(v) {}
+    BaseIntegerISA() = delete;
+
+    inline constexpr operator std::uint8_t() const noexcept { return _v; }
+
+    inline constexpr RegisterWidth width() const noexcept {
+        switch(_v) {
+            case RV32I:
+            case RV32E:
+                return RegisterWidth::W32;
+            break;
+
+            case RV64I: return RegisterWidth::W64; break;
+            case RV128I: return RegisterWidth::W128; break;
+            default: return RegisterWidth::W32; break;
+        }
+    }
+
+    std::uint8_t _v;
+};
+
+/// Extensions to the base integer instruction set
 struct Extension : BitFlags<std::uint16_t> {
     typedef std::uint16_t flag_t;
 
@@ -37,6 +67,7 @@ struct Extension : BitFlags<std::uint16_t> {
     inline constexpr Extension(F... base) noexcept : BitFlags(base...) {}
 };
 
+/// Specification of an emulated RISC-V machine
 struct IsaSpecification {
     BaseIntegerISA isa;
     Extension extensions;
