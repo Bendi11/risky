@@ -50,9 +50,10 @@ struct Extension : BitFlags<std::uint16_t> {
     typedef std::uint16_t flag_t;
 
     static constexpr const flag_t
+        I = 0,
         M = 1 << 0,
         A = 1 << 1,
-        P = 1 << 2,
+        F = 1 << 2,
         D = 1 << 3,
         Q = 1 << 4,
         L = 1 << 5,
@@ -61,7 +62,8 @@ struct Extension : BitFlags<std::uint16_t> {
         J = 1 << 8,
         T = 1 << 9,
         V = 1 << 10,
-        N = 1 << 11;
+        N = 1 << 11,
+        G = I | M | A | F | D;
 
     Extension() = default;
     template<typename... F>
