@@ -22,6 +22,7 @@ private:
     T _v;
 };
 
+/// A register of the specified width
 template<RegisterWidth>
 struct IRegister;
 
@@ -47,32 +48,28 @@ protected:
 template<BaseIntegerISA a>
 struct IRegisters;
 
-/// Integer registers defined for the RV32I base instruction set
-template<>
-struct IRegisters<BaseIntegerISA::RV32I> : IRegistersBase<IRegister<RegisterWidth::W32>, 32> {
 #define REG(name, idx) \
     inline constexpr Register name() const& noexcept { return _regs[idx]; } \
     inline constexpr Register& name() & noexcept { return _regs[idx]; }
 
-    #include "names.inc"
-#undef REG
+/// Integer registers defined for the RV32I base instruction set
+template<>
+struct IRegisters<BaseIntegerISA::RV32I> : IRegistersBase<IRegister<RegisterWidth::W32>, 32> {
+    #include "names_i.inc"
 };
 
 /// Integer registers defined for the RV64I base intstruction set
 template<>
 struct IRegisters<BaseIntegerISA::RV64I> : IRegistersBase<IRegister<RegisterWidth::W64>, 32> {
-#define REG(name, idx) \
-    inline constexpr Register name() const& noexcept { return _regs[idx]; } \
-    inline constexpr Register& name() & noexcept { return _regs[idx]; }
-
-    #include "names.inc"
-#undef REG
+    #include "names_i.inc"
 };
 
 /// All integer registers defined for the RV32E base instruction set
 template<>
 struct IRegisters<BaseIntegerISA::RV32E> : IRegistersBase<IRegister<RegisterWidth::W32>, 16> {
-
 };
+
+
+#undef REG
 
 }

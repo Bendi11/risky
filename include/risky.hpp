@@ -45,37 +45,29 @@ public:
     std::uint8_t _v;
 };
 
-/// Extensions to the base integer instruction set
-struct Extension : BitFlags<std::uint16_t> {
-    typedef std::uint16_t flag_t;
-
-    static constexpr const flag_t
-        I = 0,
-        M = 1 << 0,
-        A = 1 << 1,
-        F = 1 << 2,
-        D = 1 << 3,
-        Q = 1 << 4,
-        L = 1 << 5,
-        C = 1 << 6,
-        B = 1 << 7,
-        J = 1 << 8,
-        T = 1 << 9,
-        V = 1 << 10,
-        N = 1 << 11,
-        G = I | M | A | F | D;
-
-    Extension() = default;
-    template<typename... F>
-    inline constexpr Extension(F... base) noexcept : BitFlags(base...) {}
+enum class Extension : std::uint32_t {
+    I = 0,
+    M = 1 << 0,
+    A = 1 << 1,
+    F = 1 << 2,
+    D = 1 << 3,
+    Q = 1 << 4,
+    L = 1 << 5,
+    C = 1 << 6,
+    B = 1 << 7,
+    J = 1 << 8,
+    T = 1 << 9,
+    V = 1 << 10,
+    N = 1 << 11,
+    G = I | M | A | F | D,
 };
 
 /// Specification of an emulated RISC-V machine
 struct IsaSpecification {
     BaseIntegerISA isa;
-    Extension extensions;
+    BitFlags<Extension> extensions;
 
-    inline constexpr IsaSpecification(BaseIntegerISA _isa, Extension _ext) noexcept : isa(_isa), extensions(_ext) {}
+    inline constexpr IsaSpecification(BaseIntegerISA _isa, BitFlags<Extension> _ext) noexcept : isa(_isa), extensions(_ext) {}
 };
 
 }
@@ -96,17 +88,24 @@ struct std::formatter<risky::BaseIntegerISA> {
 };
 
 template<>
-struct std::formatter<risky::Extension> {
+struct std::formatter<BitFlags<risky::Extension>> {
     constexpr formatter() {}
     constexpr auto parse(auto& ctx) const noexcept { return std::begin(ctx); }
-    constexpr auto format(const risky::Extension& obj, auto& ctx) const noexcept {
+    constexpr auto format(const BitFlags<risky::Extension> _obj, auto& ctx) const noexcept {
+        auto obj{_obj};
+
         auto&& out = ctx.out();
+        if(obj == risky::Extension::G) {
+            std::format_to(out, "{}", 'G');
+            obj.remove(risky::Extension::G);
+        }
+
         for(auto ext : obj) {
             char ch;
             switch(ext) {
                 case risky::Extension::M: ch = 'M'; break;
                 case risky::Extension::A: ch = 'A'; break;
-                case risky::Extension::P: ch = 'P'; break;
+                case risky::Extension::F: ch = 'F'; break;
                 case risky::Extension::D: ch = 'D'; break;
                 case risky::Extension::Q: ch = 'Q'; break;
                 case risky::Extension::L: ch = 'L'; break;
