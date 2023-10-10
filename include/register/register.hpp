@@ -14,12 +14,21 @@ template<RegisterWidth>
 struct WidthStorage;
 
 template<>
-struct WidthStorage<RegisterWidth::W32> { typedef std::int32_t type; };
+struct WidthStorage<RegisterWidth::W32> {
+    typedef std::int32_t  signed_t;
+    typedef std::uint32_t unsigned_t;
+};
 template<>
-struct WidthStorage<RegisterWidth::W64>{  typedef std::int64_t type; };
+struct WidthStorage<RegisterWidth::W64>{
+    typedef std::int64_t  signed_t;
+    typedef std::uint64_t unsigned_t;
+};
 
 template<RegisterWidth W>
-using IRegister = WidthStorage<W>::type;
+using IRegister = WidthStorage<W>::signed_t;
+
+template<RegisterWidth W>
+using UIRegister = WidthStorage<W>::unsigned_t;
 
 /// Base class for integer register collections, with a common array containing each register value
 template<typename Storage, std::size_t COUNT>

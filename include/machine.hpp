@@ -12,6 +12,7 @@ template<BaseIntegerISA ISA>
 struct RiscV {
 public:
     typedef IRegister<ISA.width()> Register;
+    typedef UIRegister<ISA.width()> URegister;
 
     /// Initialize all state for the VM, allocating all memory for the vm in the process
     RiscV(std::size_t nbytes, BitFlags<Extension> ext) : extensions{ext}, registers{}, pc{0}, memory{nbytes} {}
