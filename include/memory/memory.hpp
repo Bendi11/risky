@@ -30,7 +30,7 @@ public:
     inline constexpr operator std::uint8_t*() const noexcept { return _buf; }
 
     /// Check if a read at the given address with `nb` bytes read will be valid
-    inline constexpr bool valid_read(IRegister<WIDTH> addr, IRegister<WIDTH> nb = static_cast<IRegister<WIDTH>>(WIDTH)) const noexcept { return (addr + nb) < _len; }
+    inline constexpr bool valid_read(WidthStorage<WIDTH> addr, WidthStorage<WIDTH> nb = static_cast<WidthStorage<WIDTH>>(WIDTH)) const noexcept { return (addr + nb) < _len; }
 private:
     std::uint8_t *_buf;
     std::size_t _len;

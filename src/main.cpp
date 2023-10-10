@@ -15,10 +15,10 @@ int main(int, const char *[]) {
     std::ostream_iterator<char> out(std::cout);
     
     std::uint64_t c = 0b011100000;
-    std::format_to(out, "{:b}[6:4] = {:08b}\n", c, readbits<6,4>(c));
+    std::format_to(out, "{:b}[6:4] = {:08b}\n", c, readbits_zext<6,4>(c));
 
-    machine.exec(0x3e800093);
-    machine.exec(0x0fa08013);
-    std::format_to(out, "{}\n", static_cast<std::uint32_t>(machine.registers[0]));
+    machine.exec(0xc1800093);
+    machine.exec(0x1f408013);
+    std::format_to(out, "{}\n", static_cast<std::int32_t>(machine.registers[0]));
     return 0;
 }

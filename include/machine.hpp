@@ -11,6 +11,8 @@ namespace risky {
 template<BaseIntegerISA ISA>
 struct RiscV {
 public:
+    typedef IRegister<ISA.width()> Register;
+
     /// Initialize all state for the VM, allocating all memory for the vm in the process
     RiscV(std::size_t nbytes, BitFlags<Extension> ext) : extensions{ext}, registers{}, pc{0}, memory{nbytes} {}
     
@@ -19,7 +21,7 @@ public:
     
     BitFlags<Extension> extensions;
     IRegisters<ISA> registers;
-    IRegister<ISA.width()> pc;
+    Register pc;
     Memory<ISA.width()> memory;
 };
 

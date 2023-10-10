@@ -8,28 +8,18 @@
 
 namespace risky {
 
-/// Base class for all registers across a variety of widths, with common conversion operations already defined
-template<typename T>
-struct RegisterBase {
-public:
-    inline constexpr RegisterBase(T v) noexcept : _v(v) {}
-    inline constexpr RegisterBase() noexcept : _v(0) {}
-
-    inline constexpr operator T() const noexcept { return _v; }
-    inline constexpr operator T&() & noexcept { return _v; }
-    inline constexpr operator T const&() const& noexcept { return _v; }
-private:
-    T _v;
-};
 
 /// A register of the specified width
 template<RegisterWidth>
-struct IRegister;
+struct WidthStorage;
 
 template<>
-struct IRegister<RegisterWidth::W32> : RegisterBase<std::uint32_t> {};
+struct WidthStorage<RegisterWidth::W32> { typedef std::int32_t type; };
 template<>
-struct IRegister<RegisterWidth::W64> : RegisterBase<std::uint64_t> {};
+struct WidthStorage<RegisterWidth::W64>{  typedef std::int64_t type; };
+
+template<RegisterWidth W>
+using IRegister = WidthStorage<W>::type;
 
 /// Base class for integer register collections, with a common array containing each register value
 template<typename Storage, std::size_t COUNT>
