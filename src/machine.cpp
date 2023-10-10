@@ -28,9 +28,8 @@ void RiscV<ISA>::exec(std::uint32_t inst) noexcept {
     }
 }
 
+template void RiscV<BaseIntegerISA::RV32E>::exec(std::uint32_t inst) noexcept;
 template void RiscV<BaseIntegerISA::RV32I>::exec(std::uint32_t inst) noexcept;
-template<> struct RiscV<BaseIntegerISA::RV32E>;
-template<> struct RiscV<BaseIntegerISA::RV64I>;
-template<> struct RiscV<BaseIntegerISA::RV128I>;
+template void RiscV<BaseIntegerISA::RV64I>::exec(std::uint32_t inst) noexcept;
 
 }
