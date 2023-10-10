@@ -38,6 +38,16 @@ struct InstructionConstants {
             SYSTEM =    0b11100,
             CUSTOM_3 =  0b11110;
     };
+
+    struct IMMFunct3 {
+        static constexpr inline std::uint8_t
+            ADDI =  0b000,
+            SLTI =  0b010,
+            SLTIU = 0b011,
+            XORI =  0b100,
+            ORI  =  0b110,
+            ANDI =  0b111;
+    };
 };
 
 }

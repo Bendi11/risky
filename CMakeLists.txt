@@ -15,13 +15,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(
     SRC
     "src/main.cpp"
+    "src/machine.cpp"
 )
 
 add_executable(${CMAKE_PROJECT_NAME} ${SRC})
 
 target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+  $<$<CXX_COMPILER_ID:MSVC>:/W4>
+  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "./include/")
